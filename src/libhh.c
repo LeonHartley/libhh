@@ -4,6 +4,14 @@
 
 #include "libhh.h"
 
+typedef struct {
+  uv_write_t req;
+  uv_buf_t buf;
+} write_req_t;
+
+
+char* POLICY_DATA = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE cross-domain-policy SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\r\n<cross-domain-policy>\r\n<allow-access-from domain=\"*\" to-ports=\"*\" />\r\n</cross-domain-policy>\0";
+
 void alloc_buffer(uv_handle_t* handle, size_t size, uv_buf_t* buf) {
     buf->base = malloc(size);
     buf->len = size;
@@ -14,15 +22,27 @@ void on_close(uv_handle_t *handle) {
     printf("disposed connection");
 }
 
+void on_write(uv_write_t* req, int status) {
+
+}
+
 void on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
     if(nread == UV_EOF) {
-        uv_close((uv_handle_t *) client, NULL);
+        uv_close((uv_handle_t *) handle, NULL);
         return;
     }
 
     if(nread >= 0) {
         if(buf->base[0] == '<') {
             printf("received policy request\n");
+            
+            write_req_t *writeReq = (write_req_t*) malloc(sizeof (write_req_t));
+            writeReq->buf = uv_buf_init(POLICY_DATA, sizeof(POLICY_DATA));
+
+            if (uv_write(&writeReq->req, handle, &writeReq->buf, 1, on_write)) {
+                fprintf(stderr, "");
+            }
+
         } else {
             printf("received game message\n");
         }
@@ -45,7 +65,7 @@ void on_new_connection(uv_stream_t *server, int status) {
     if(result == 0) {
         uv_read_start((uv_stream_t *) client, alloc_buffer, on_read);
     } else {
-        // failed to accept connection.
+        // failed to accept client
     }
 }
 
