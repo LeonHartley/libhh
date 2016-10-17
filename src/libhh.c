@@ -19,11 +19,12 @@ void alloc_buffer(uv_handle_t* handle, size_t size, uv_buf_t* buf) {
 
 void on_close(uv_handle_t *handle) {
     // on connection closed
-    printf("disposed connection");
+    printf("disposed connection\n");
 }
 
 void on_write(uv_write_t* req, int status) {
-
+    uv_close((uv_handle_t *) req->handle, NULL);
+    printf("sent data\n");
 }
 
 void on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
@@ -40,9 +41,8 @@ void on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
             writeReq->buf = uv_buf_init(POLICY_DATA, sizeof(POLICY_DATA));
 
             if (uv_write(&writeReq->req, handle, &writeReq->buf, 1, on_write)) {
-                fprintf(stderr, "");
+                fprintf(stderr, "hi\n");
             }
-
         } else {
             printf("received game message\n");
         }
