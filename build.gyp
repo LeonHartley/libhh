@@ -6,6 +6,11 @@
       'type': 'executable',
       'sources': [
         'src/libhh.c',
+        'src/net/server.h',
+        'src/net/server.c',
+        'src/net/message_handler.h',
+        'src/net/message_handler.c',
+        'src/net/handlers/handshake_handler.h',
       ],
       'dependencies': [
         './deps/libuv/uv.gyp:libuv',
