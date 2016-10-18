@@ -15,6 +15,7 @@ void read_release_message_handler(hh_buffer_t *buffer, uv_stream_t *session) {
     free(release_version);
 }
 
+//unused atm 
 void init_cryptography_message_handler(hh_buffer_t *buffer, uv_stream_t *session) {
      printf("initialising cryptography\n");
 }
@@ -25,6 +26,5 @@ void read_unique_id_handler(hh_buffer_t *buffer, uv_stream_t *session) {
 
     printf("unique id: %s\n", unique_id);
     
-    //free(first_str);
     free(unique_id);
 }
