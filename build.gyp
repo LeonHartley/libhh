@@ -11,6 +11,8 @@
         'src/net/message_handler.h',
         'src/net/message_handler.c',
         'src/net/handlers/handshake_handler.h',
+        'src/net/buffer/buffer.h',
+        'src/net/buffer/buffer.c',
       ],
       'dependencies': [
         './deps/libuv/uv.gyp:libuv',

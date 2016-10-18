@@ -1,6 +1,8 @@
 #include "server.h"
+#include "buffer/buffer.h"
+#include <stdlib.h>
 
-void hh_alloc_buffer(uv_handle_t* handle, size_t size, uv_buf_t* buf) {
+void hh_alloc_buffer(uv_handle_t* handle, size_t  size, uv_buf_t* buf) {
     buf->base = malloc(size);
     buf->len = size;
 }
@@ -14,7 +16,7 @@ void hh_on_write(uv_write_t* req, int status) {
     uv_close((uv_handle_t *) req->handle, hh_on_connection_close);
     printf("sent data\n");
 
-    free(req->data);
+    //free(req->data);
 }
 
 void hh_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
@@ -42,12 +44,16 @@ void hh_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
             uv_write(req, handle, &buffer, 1, hh_on_write);
         } else {
             printf("message: %s, length: %i\n", buf->base, nread);
+
+            // here we want to create a buffer
+            hh_buffer_t *buffer = hh_buffer_create(nread, buf->base);
+            printf("buffer created with length: %i\n", buffer->length);
         }
     } else {
         uv_close((uv_handle_t *) handle, hh_on_connection_close);
     }
 
-    free(buf->base);
+    //free(buf->base);
 }
 
 void hh_on_new_connection(uv_stream_t *server, int status) {

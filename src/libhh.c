@@ -2,8 +2,9 @@
 // Created by Leon on 17/10/2016.
 //
 
-#include "libhh.h"
+#include <stdlib.h>
 
+#include "libhh.h"
 #include "net/server.h"
 
 int main(int argc, char *argv[]) {
