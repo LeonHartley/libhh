@@ -15,8 +15,6 @@ void hh_on_connection_close(uv_handle_t *handle) {
 void hh_on_write(uv_write_t* req, int status) {
     uv_close((uv_handle_t *) req->handle, hh_on_connection_close);
     printf("[libhh] sent a message \n");
-
-    //free(req->data);
 }
 
 void hh_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
@@ -27,27 +25,39 @@ void hh_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
 
     if(nread >= 0) {
         if(buf->base[0] == '<') {
-            char policyFile[208] = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE cross-domain-policy SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\r\n<cross-domain-policy>\r\n<allow-access-from domain=\"*\" to-ports=\"*\" />\r\n</cross-domain-policy>\0";
+            char policy_file[208] = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE cross-domain-policy SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\r\n<cross-domain-policy>\r\n<allow-access-from domain=\"*\" to-ports=\"*\" />\r\n</cross-domain-policy>\0";
 
             uv_write_t *req;
             if(!(req = malloc(sizeof(uv_write_t)))){
                 return;                    
             }
 
-            uv_buf_t buffer = uv_buf_init(malloc(sizeof(policyFile)), sizeof(policyFile));
+            uv_buf_t buffer = uv_buf_init(malloc(sizeof(policy_file)), sizeof(policy_file));
 
-            buffer.base = policyFile;
+            buffer.base = policy_file;
 
             req->handle = handle;
             req->data = buffer.base;
 
             uv_write(req, handle, &buffer, 1, hh_on_write);
         } else {
-            printf("[libhh] received message: %s, length: %zi\n", buf->base, nread);
-
             // here we want to create a buffer
             hh_buffer_t *buffer = hh_buffer_create(nread, buf->base);
-            printf("buffer created with length: %i\n", buffer->length);
+            printf("[libhh] buffer created with length: %i\n", buffer->length);
+
+            int message_length = hh_buffer_read_int(buffer);
+            //short message_id = hh_buffer_read_short(buffer);
+
+            handle_message(buffer, handle);
+
+            //if(message_length > 2) {
+                //printf("[libhh] id %i, with length %i, message_index %i\n", message_id, message_length, buffer->index);
+            //    free(data);
+            //} else {
+            //    printf("[libhh] id %i, length %i, message_index %i\n", message_id, message_length, buffer->index);
+            //}
+
+            hh_buffer_free(buffer);
         }
     } else {
         uv_close((uv_handle_t *) handle, hh_on_connection_close);

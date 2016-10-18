@@ -13,7 +13,6 @@ int main(int argc, char *argv[]) {
     printf("[libhh] initialising message handlers\n");
 
     load_message_handlers();
-    handle_message(NULL, NULL);
 
     printf("[libhh] initialising event loop with io on port %i\n", PORT);
 
