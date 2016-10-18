@@ -5,8 +5,8 @@
 #pragma once
 
 typedef struct {
-    int *index;
-    int *length;
+    int index;
+    int length;
     char *base;
 } hh_buffer_t;
 

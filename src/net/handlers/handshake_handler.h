@@ -8,5 +8,5 @@
 #include "uv.h"
 
 void hello_message_handler(char *message, uv_stream_t *session) {
-    printf("handling hello message\n");
+    //printf("handling hello message\n");
 }

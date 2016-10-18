@@ -3,13 +3,14 @@
 //
 
 #include "buffer.h"
+#include <stdlib.h>
 
 hh_buffer_t *hh_buffer_create(int length, char *base) {
     hh_buffer_t *buffer = malloc(sizeof(hh_buffer_t));
 
     buffer->index = 0;
     buffer->length = length;
-    buffer->base = &base;
+    buffer->base = base;
 
     return buffer;
 }
