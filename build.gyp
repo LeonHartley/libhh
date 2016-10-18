@@ -15,8 +15,8 @@
         'src/net/buffer/buffer.c',
       ],
       'dependencies': [
-        './deps/libuv/uv.gyp:libuv',
-      ],
+        './deps/libuv/uv.gyp:libuv'
+      ]
     }
   ]
 }

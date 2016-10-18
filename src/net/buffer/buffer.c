@@ -4,6 +4,7 @@
 
 #include "buffer.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 hh_buffer_t *hh_buffer_create(int length, char *base) {
     hh_buffer_t *buffer = malloc(sizeof(hh_buffer_t));
@@ -20,19 +21,15 @@ void hh_buffer_free(hh_buffer_t *buffer) {
 }
 
 int hh_buffer_read_int(hh_buffer_t *buffer) {
-    int i = ((int)buffer->base[buffer->index++] << 24) |
-        ((int) buffer->base[buffer->index++] << 16) |
-        ((int) buffer->base[buffer->index++] << 8) | 
-        ((int) buffer->base[buffer->index++]);
-
-    return i;
+    return (0xff & buffer->base[buffer->index++] << 24) |
+        (0xff & buffer->base[buffer->index++] << 16) |
+        (0xff & buffer->base[buffer->index++] << 8) | 
+        (0xff & buffer->base[buffer->index++]);
 }
 
 short hh_buffer_read_short(hh_buffer_t *buffer) {
-    short s = ((short)buffer->base[buffer->index++] << 8) |
-            ((short) buffer->base[buffer->index++]);
-        
-    return s;
+    return (0xff & buffer->base[buffer->index++]) << 8 |
+        (0xff & buffer->base[buffer->index++] << 0);
 }
 
 // make sure we free the char*!!!!!!!

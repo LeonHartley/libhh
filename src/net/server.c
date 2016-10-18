@@ -1,5 +1,6 @@
 #include "server.h"
 #include "buffer/buffer.h"
+
 #include <stdlib.h>
 
 void hh_alloc_buffer(uv_handle_t* handle, size_t  size, uv_buf_t* buf) {
@@ -46,16 +47,8 @@ void hh_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
             printf("[libhh] buffer created with length: %i\n", buffer->length);
 
             int message_length = hh_buffer_read_int(buffer);
-            //short message_id = hh_buffer_read_short(buffer);
 
             handle_message(buffer, handle);
-
-            //if(message_length > 2) {
-                //printf("[libhh] id %i, with length %i, message_index %i\n", message_id, message_length, buffer->index);
-            //    free(data);
-            //} else {
-            //    printf("[libhh] id %i, length %i, message_index %i\n", message_id, message_length, buffer->index);
-            //}
 
             hh_buffer_free(buffer);
         }
