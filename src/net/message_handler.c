@@ -3,6 +3,7 @@
 //
 
 #include "message_handler.h"
+#include "handlers/handshake_handler.h"
 
 hh_message_handler_t *create_handler(int message_id, void (*handler)(char *, uv_stream_t *)) {
     hh_message_handler_t *msg = malloc(sizeof(hh_message_handler_t));
@@ -14,7 +15,7 @@ hh_message_handler_t *create_handler(int message_id, void (*handler)(char *, uv_
 }
 
 void load_message_handlers() {
-    //handlers[0] = create_handler(0, &hello_message_handler);
+    handlers[0] = create_handler(0, &hello_message_handler);
 }
 
 void handle_message(char *buffer, uv_stream_t *handle) {

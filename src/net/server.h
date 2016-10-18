@@ -3,6 +3,11 @@
 #include <stdlib.h>
 #include "uv.h"
 
+typedef struct {
+  uv_write_t req;
+  uv_buf_t buf;
+} write_req_t;
+
 void hh_alloc_buffer(uv_handle_t* handle, size_t size, uv_buf_t* buf);
 
 void hh_on_connection_close(uv_handle_t *handle);
