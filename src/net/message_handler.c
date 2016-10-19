@@ -17,8 +17,9 @@ hh_message_handler_t *create_handler(int message_id, void (*handler)(hh_buffer_t
 }
 
 void load_message_handlers() {
-    handlers[4000] = create_handler(4000, &read_release_message_handler);
-    handlers[3659] = create_handler(260, &read_unique_id_handler);
+    handlers[4000] = &read_release_message_handler;
+    handlers[3659] = &read_unique_id_handler;
+    handlers[1490] = &read_sso_ticket_handler;
 }
 
 void handle_message(hh_buffer_t *buffer, uv_stream_t *handle) {
@@ -27,9 +28,8 @@ void handle_message(hh_buffer_t *buffer, uv_stream_t *handle) {
     if(handlers[header_id]) {
         printf("handling message with id %i\n", header_id);
 
-        handlers[header_id]->handler(buffer, handle);
+        ((void (*)(hh_buffer_t *, uv_stream_t *)) handlers[header_id])(buffer, handle);
     } else {
         printf("unhandled message with id %i\n", header_id);
-
     }
 }
