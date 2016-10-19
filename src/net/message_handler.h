@@ -12,3 +12,5 @@ void (*handlers[4001]);
 void load_message_handlers();
 
 void handle_message(hh_buffer_t *buffer, uv_stream_t *handle);
+
+void write_message(hh_buffer_t* message, uv_stream_t *session);

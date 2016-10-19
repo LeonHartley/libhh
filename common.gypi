@@ -32,7 +32,7 @@
         }
       },
       'Release': {
-        'cflags': [ '-O3', '-std=C11'],
+        'cflags': [ '-O3' ],
         'defines': [ 'NDEBUG' ],
         'xcode_settings': {
           'OTHER_CFLAGS': [ '-O3' ]

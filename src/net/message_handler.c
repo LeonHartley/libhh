@@ -7,15 +7,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-hh_message_handler_t *create_handler(int message_id, void (*handler)(hh_buffer_t *, uv_stream_t *)) {
-    hh_message_handler_t *msg = malloc(sizeof(hh_message_handler_t));
-
-    msg->message_id = message_id;
-    msg->handler = handler;
-
-    return msg;
-}
-
 void load_message_handlers() {
     handlers[4000] = &read_release_message_handler;
     handlers[3659] = &read_unique_id_handler;
@@ -32,4 +23,22 @@ void handle_message(hh_buffer_t *buffer, uv_stream_t *handle) {
     } else {
         printf("unhandled message with id %i\n", header_id);
     }
+}
+
+void write_message(hh_buffer_t* message, uv_stream_t *session) {
+    uv_write_t *req;
+    if(!(req = malloc(sizeof(uv_write_t)))){
+        return;                    
+    }
+
+    hh_buffer_prepare(message);
+
+    uv_buf_t buffer = uv_buf_init(malloc(message->index), sizeof(message->index));
+
+    buffer.base = message->base;
+
+    req->handle = session;
+    req->data = buffer.base;
+
+    uv_write(req, session, &buffer, 1, NULL);
 }
