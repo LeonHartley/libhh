@@ -3,6 +3,7 @@
 //
 
 #include "buffer.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -24,7 +25,7 @@ int hh_buffer_read_int(hh_buffer_t *buffer) {
     return (0xff & buffer->base[buffer->index++] << 24) |
         (0xff & buffer->base[buffer->index++] << 16) |
         (0xff & buffer->base[buffer->index++] << 8) | 
-        (0xff & buffer->base[buffer->index++]);
+       (0xff & buffer->base[buffer->index++]);
 }
 
 short hh_buffer_read_short(hh_buffer_t *buffer) {
@@ -42,4 +43,20 @@ char *hh_buffer_read_string(hh_buffer_t *buffer) {
     }
 
     return string;
+}
+
+void hh_buffer_write_string(char* string, hh_buffer_t *buffer) {
+
+}
+
+void hh_buffer_write_short(short s, hh_buffer_t *buffer) {
+
+}
+
+void hh_buffer_write_int(int i, hh_buffer_t *buffer) {
+
+}
+
+void hh_buffer_write_byte(char byte, hh_buffer_t *buffer) {
+
 }

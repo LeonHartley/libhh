@@ -47,9 +47,8 @@ void hh_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
             printf("[libhh] buffer created with length: %i\n", buffer->length);
 
             int message_length = hh_buffer_read_int(buffer);
-
+            
             handle_message(buffer, handle);
-
             hh_buffer_free(buffer);
         }
     } else {
