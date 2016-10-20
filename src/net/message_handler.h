@@ -7,6 +7,7 @@
 #include "uv.h"
 #include "buffer/buffer.h"
 
+// todo: still need to sort this monstrosity
 void (*handlers[4001]);
 
 void load_message_handlers();
