@@ -35,14 +35,18 @@ int read_sso_ticket_handler(hh_buffer_t *buffer, uv_stream_t *session) {
     // Find user with login ticket
     printf("recieved login ticket %s\n", login_ticket);
 
-    hh_buffer_t *motd_buffer = hh_buffer_create(1024, ((char *) malloc(1024)));
+    hh_buffer_t *auth_ok = hh_buffer_create(8, ((char *) malloc(8)));
+    hh_buffer_t *motd_buffer = hh_buffer_create(25, ((char *) malloc(25)));
 
-    hh_buffer_initialise(motd_buffer);
-
-    hh_buffer_write_short(1244, motd_buffer); // motd header
+    hh_buffer_initialise(motd_buffer); 
+    hh_buffer_write_short(773, motd_buffer);
     hh_buffer_write_int(1, motd_buffer);
-    hh_buffer_write_string("hey there! :D", motd_buffer);
+    hh_buffer_write_string("heyo", motd_buffer);
 
+    hh_buffer_initialise(auth_ok);
+    hh_buffer_write_short(1552, auth_ok);
+
+    write_message(auth_ok, session);
     write_message(motd_buffer, session);
 
     free(login_ticket);

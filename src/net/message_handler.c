@@ -4,6 +4,8 @@
 
 #include "message_handler.h"
 #include "handlers/handshake_handler.h"
+#include "server.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -33,12 +35,10 @@ void write_message(hh_buffer_t* message, uv_stream_t *session) {
 
     hh_buffer_prepare(message);
 
-    uv_buf_t buffer = uv_buf_init(malloc(message->index), sizeof(message->index));
-
-    buffer.base = message->base;
+    uv_buf_t buffer = uv_buf_init(message->base, message->index + 4);
 
     req->handle = session;
     req->data = buffer.base;
 
-    uv_write(req, session, &buffer, 1, NULL);
+    uv_write(req, session, &buffer, 1, hh_on_write);
 }

@@ -1,6 +1,7 @@
 #include "server.h"
 #include "buffer/buffer.h"
 
+#include <string.h>
 #include <stdlib.h>
 
 void hh_alloc_buffer(uv_handle_t* handle, size_t  size, uv_buf_t* buf) {
@@ -14,8 +15,14 @@ void hh_on_connection_close(uv_handle_t *handle) {
 }
 
 void hh_on_write(uv_write_t* req, int status) {
+    //uv_close((uv_handle_t *) req->handle, hh_on_connection_close);
+   //printf("[libhh] sent a message %i\n", sizeof());
+   free(req->data);
+}
+
+void hh_close_on_write(uv_write_t *req, int status) {
     uv_close((uv_handle_t *) req->handle, hh_on_connection_close);
-    printf("[libhh] sent a message \n");
+    //free(req->data);
 }
 
 void hh_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
@@ -40,7 +47,7 @@ void hh_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
             req->handle = handle;
             req->data = buffer.base;
 
-            uv_write(req, handle, &buffer, 1, hh_on_write);
+            uv_write(req, handle, &buffer, 1, hh_close_on_write);
         } else {
             // here we want to create a buffer
             hh_buffer_t *buffer = hh_buffer_create(nread, buf->base);
