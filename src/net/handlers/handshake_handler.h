@@ -7,47 +7,12 @@
 #include <stdlib.h>
 #include "uv.h"
 #include "../buffer/buffer.h"
+#include "../composers/handshake_composers.h"
 
-int read_release_message_handler(hh_buffer_t *buffer, uv_stream_t *session) {
-    char *release_version = hh_buffer_read_string(buffer);
+void read_release_message_handler(hh_buffer_t *buffer, uv_stream_t *session);
 
-    printf("reading release %s\n", release_version);
-    free(release_version);
-}
+void init_cryptography_message_handler(hh_buffer_t *buffer, uv_stream_t *session);
 
-//unused atm 
-int init_cryptography_message_handler(hh_buffer_t *buffer, uv_stream_t *session) {
-     printf("initialising cryptography\n");
-}
+void read_unique_id_handler(hh_buffer_t *buffer, uv_stream_t *session);
 
-int read_unique_id_handler(hh_buffer_t *buffer, uv_stream_t *session) {
-    short unused = hh_buffer_read_short(buffer);
-    char *unique_id = hh_buffer_read_string(buffer);
-
-    printf("unique id: %s\n", unique_id);
-    
-    free(unique_id);
-}
-
-int read_sso_ticket_handler(hh_buffer_t *buffer, uv_stream_t *session) {
-    char* login_ticket = hh_buffer_read_string(buffer);
-
-    // Find user with login ticket
-    printf("recieved login ticket %s\n", login_ticket);
-
-    hh_buffer_t *auth_ok = hh_buffer_create(8, ((char *) malloc(8)));
-    hh_buffer_t *motd_buffer = hh_buffer_create(25, ((char *) malloc(25)));
-
-    hh_buffer_initialise(motd_buffer); 
-    hh_buffer_write_short(773, motd_buffer);
-    hh_buffer_write_int(1, motd_buffer);
-    hh_buffer_write_string("heyo", motd_buffer);
-
-    hh_buffer_initialise(auth_ok);
-    hh_buffer_write_short(1552, auth_ok);
-
-    write_message(auth_ok, session);
-    write_message(motd_buffer, session);
-
-    free(login_ticket);
-}
+void read_sso_ticket_handler(hh_buffer_t *buffer, uv_stream_t *session);
