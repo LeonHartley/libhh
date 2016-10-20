@@ -15,8 +15,6 @@ void hh_on_connection_close(uv_handle_t *handle) {
 }
 
 void hh_on_write(uv_write_t* req, int status) {
-    //uv_close((uv_handle_t *) req->handle, hh_on_connection_close);
-   //printf("[libhh] sent a message %i\n", sizeof());
    free(req->data);
 }
 
