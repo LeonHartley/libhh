@@ -2,6 +2,7 @@
 // Created by Leon on 18/10/2016.
 //
 
+#include "events/events.h"
 #include "message_handler.h"
 #include "handlers/handshake_handler.h"
 #include "server.h"
@@ -9,25 +10,27 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void load_message_handlers() {
-    handlers[4000] = &read_release_message_handler;
-    handlers[3659] = &read_unique_id_handler;
-    handlers[1490] = &read_sso_ticket_handler;
+static void(*handlers[4001]) (hh_buffer_t *, hh_session_t *);
+
+void hh_initialise_message_handler() {
+    handlers[InitCryptoMessageEvent] = &init_cryptography_message_handler;
+    handlers[SSOTicketMessageEvent] = &read_sso_ticket_handler;
+    handlers[RoomTextSearchMessageEvent] = &navigator_text_search_test;
 }
 
-void handle_message(hh_buffer_t *buffer, uv_stream_t *handle) {
+void handle_message(hh_buffer_t *buffer, hh_session_t *session) {
     short header_id = hh_buffer_read_short(buffer);
 
     if(handlers[header_id]) {
         printf("handling message with id %i\n", header_id);
 
-        ((void (*)(hh_buffer_t *, uv_stream_t *)) handlers[header_id])(buffer, handle);
+       handlers[header_id](buffer, session);
     } else {
         printf("unhandled message with id %i\n", header_id);
     }
 }
 
-void write_message(hh_buffer_t* message, uv_stream_t *session) {
+void hh_write_message(hh_buffer_t* message, hh_session_t *session) {
     uv_write_t *req;
     if(!(req = malloc(sizeof(uv_write_t)))){
         return;                    
@@ -35,10 +38,16 @@ void write_message(hh_buffer_t* message, uv_stream_t *session) {
 
     hh_buffer_prepare(message);
 
-    uv_buf_t buffer = uv_buf_init(message->base, message->index + 4);
+    int message_length = message->index + 4;
 
-    req->handle = session;
+    uv_buf_t buffer = uv_buf_init(malloc(message_length), message_length);
+
+    memcpy(buffer.base, message->base, message_length);
+
+    req->handle = (void *)session;
     req->data = buffer.base;
 
-    uv_write(req, session, &buffer, 1, hh_on_write);
+    uv_write(req, session->client, &buffer, 1, &hh_on_write);
+
+    hh_buffer_free(message);
 }

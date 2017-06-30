@@ -4,14 +4,12 @@
 
 #pragma once
 
+#include "sessions/session.h"
 #include "uv.h"
 #include "buffer/buffer.h"
 
-// todo: still need to sort this monstrosity
-void (*handlers[4001]);
+void hh_initialise_message_handler();
 
-void load_message_handlers();
+void handle_message(hh_buffer_t *buffer, hh_session_t *session);
 
-void handle_message(hh_buffer_t *buffer, uv_stream_t *handle);
-
-void write_message(hh_buffer_t* message, uv_stream_t *session);
+void write_message(hh_buffer_t* message, hh_session_t *session);
