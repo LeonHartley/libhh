@@ -32,10 +32,14 @@
         'src/util/pool.h',
         'src/util/pool.c',
         'src/storage/connection.h',
+        'src/storage/connection.c'
       ],
       'dependencies': [
         './deps/libuv/uv.gyp:libuv'
-      ]
+      ],
+      'link_settings': {
+        'libraries': ['-lmysqlclient'],
+      },
     }
   ]
 }
