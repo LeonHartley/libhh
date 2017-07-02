@@ -55,9 +55,9 @@ int main(int argc, char *argv[]) {
 
     hh_storage_initialise();
 
-    hh_player_data_t *stored = hh_player_dao->authenticate("haha");
+    hh_player_data_t *stored = hh_player_dao->authenticate("Leon");
 
-    printf("found username %s\n", stored->username);
+    //printf("found username %s\n", stored->username);
 
     // hh_player_data_dispose(stored);
 

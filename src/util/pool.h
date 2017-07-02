@@ -2,6 +2,8 @@
 
 #include <stdlib.h>
 
+// TODO: locks, timeouts etc.
+
 typedef struct {
     int index;
     void *value;
