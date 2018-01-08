@@ -6,7 +6,11 @@ typedef struct {
     int id;
     char *username;
     char *figure;
-    int gender;
+    char gender;
+    int date_created;
+    int date_last_active;
+    int credits;
+    int rank;
 } hh_player_data_t;
 
 typedef struct {
@@ -18,7 +22,7 @@ typedef struct {
  */
 hh_player_t *hh_player_create();
 
-hh_player_data_t *hh_player_data_create(int id, char *username, char *figure, char gender);
+hh_player_data_t *hh_player_data_create(int id, const char *username, const char *figure, const char gender);
 
 /**
  *  Frees any memory associated with the player data & frees 

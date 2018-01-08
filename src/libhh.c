@@ -12,54 +12,32 @@
 #include "util/hashmap.h"
 
 #include "storage/storage.h"
-#include "storage/connection.h"
+#include "storage/sqlite/database.h"
 
 #include "players/player.h"
-#include <mysql/mysql_version.h>
+#include "catalog/catalog.h"
 
 int main(int argc, char *argv[]) {
     printf("[libhh] habbo emulation written in C\n");
 
     printf("[libhh] libuv version: %s\n", uv_version_string());
-    printf("[libhh] mysql client version: %s\n", MYSQL_SERVER_VERSION);
 
     printf("[libhh] initialising message handlers\n");
     hh_initialise_message_handler();    
 
-    hh_mysql_config_t config = {
-        .hostname = "localhost",
-        .username = "root",
-        .password = "",
-        .database = "cometsrv",
-        .connection_count = 2
+    hh_sqlite_config_t sqlite_config = {
+        .server_db = "database/players.sqlite",  
+        .log_db = "database/logs.sqlite"
     };
 
-    hh_mysql_create_pool(&config);
-
-    //
-
- /*   hh_player_data_t *player_data = hh_player_data_create(1, "Leon", "figure-code-123", 'M');
-
-    map_t players = hashmap_new();
-    hashmap_put(players, "Leon", player_data);
-    hh_player_data_t *found_player;
-
-    hashmap_get(players, "Leon", &found_player);
-    printf("[libhh] found player with figure %s\n", found_player->figure);
-
-    /*char *name = "Leon";
-
-
-
-    //*/
+    if(hh_sqlite_initialise_dbs(&sqlite_config)) {
+        printf("[libhh] Failed to load databases!");
+        return 1;
+    }
 
     hh_storage_initialise();
 
-    hh_player_data_t *stored = hh_player_dao->authenticate("Leon");
-
-    //printf("found username %s\n", stored->username);
-
-    // hh_player_data_dispose(stored);
+    hh_catalog_initialise();
 
     printf("[libhh] initialising event loop with io on port %i\n", PORT);
     hh_start_server(HOST, PORT);

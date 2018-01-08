@@ -1,10 +1,18 @@
+#pragma once
 
 /**
  *  Global composers.
  *  Supported client : RELEASE63-35668-35665-201108301108
  */
 
-const short InitCryptoMessageComposer = 277;
-const short SessionParamsMessageComposer = 257;
-const short AuthenticationOKMessageComposer = 3;
-const short MotdNotificationMessageComposer = 810;
+
+#define InitCryptoMessageComposer 277
+#define SessionParamsMessageComposer 257
+#define AuthenticationOKMessageComposer 3
+#define MotdNotificationMessageComposer 810
+#define UserObjectMessageComposer 5
+#define CreditBalanceMessageComposer 6
+#define UserRoomCategoriesMessageComposer 221
+
+#define CatalogIndexMessageComposer 126
+#define CatalogPageMessageComposer 127

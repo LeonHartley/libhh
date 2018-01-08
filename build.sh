@@ -1,2 +1,0 @@
-rm -rf libhh
-make

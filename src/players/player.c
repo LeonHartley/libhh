@@ -3,19 +3,23 @@
 /**
  *  Creates a player with the set session
  */
-hh_player_t *hh_player_create() {
+hh_player_t *hh_player_create(hh_player_data_t *player_data) {
     hh_player_t *player = malloc(sizeof(hh_player_t));
+
+    player->data = player_data;
 
     return player;
 }
 
-hh_player_data_t *hh_player_data_create(int id, char *username, char *figure, char gender) {
+hh_player_data_t *hh_player_data_create(int id, const char *username, const char *figure, char gender) {
     hh_player_data_t *data = malloc(sizeof(hh_player_data_t));
 
     data->id = id;
     data->username = strdup(username);
     data->figure = strdup(figure);
     data->gender = gender;
+    data->rank = 7;/*load this from db*/
+    data->credits = 1000;
 
     return data;
 }

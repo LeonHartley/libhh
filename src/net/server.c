@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-const char policy_file[208] = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE cross-domain-policy SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\r\n<cross-domain-policy>\r\n<allow-access-from domain=\"*\" to-ports=\"*\" />\r\n</cross-domain-policy>\0";
+const char policy_file[208] = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE cross-domain-policy \ SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\r\n<cross-domain-policy>\r\n<allow-access-from domain=\"*\" to-ports=\"*\" />\r\n</cross-domain-policy>\0";
 
 void hh_alloc_buffer(uv_handle_t* handle, size_t  size, uv_buf_t* buf) {
     buf->base = malloc(size);
@@ -14,6 +14,11 @@ void hh_alloc_buffer(uv_handle_t* handle, size_t  size, uv_buf_t* buf) {
 
 void hh_on_connection_close(uv_handle_t *handle) {
     // on connection closed
+
+    if(handle->data != NULL) {
+    //    hh_session_dispose((hh_session_t *) handle->data);
+    }
+
     printf("[libhh] disposed a connection\n");
 }
 

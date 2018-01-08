@@ -7,7 +7,6 @@ void hh_session_dispose(hh_session_t *session) {
         hh_player_dispose(session->player);
     }
 
-    free(session->ip_address);
     free(session);
 }
 

@@ -32,7 +32,6 @@ hh_buffer_t *hh_buffer_expand_if_required(hh_buffer_t *buffer, int req_bytes) {
     return buffer;
 }
 
-
 hh_buffer_t *hh_buffer_create(int length, char *base) {
     hh_buffer_t *buffer = malloc(sizeof(hh_buffer_t));
 

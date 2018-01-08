@@ -5,6 +5,8 @@
 #include "events/events.h"
 #include "message_handler.h"
 #include "handlers/handshake_handler.h"
+#include "handlers/catalog/catalog_handler.h"
+
 #include "server.h"
 
 #include <stdlib.h>
@@ -15,6 +17,11 @@ static void(*handlers[4001]) (hh_buffer_t *, hh_session_t *);
 void hh_initialise_message_handler() {
     handlers[InitCryptoMessageEvent] = &init_cryptography_message_handler;
     handlers[SSOTicketMessageEvent] = &read_sso_ticket_handler;
+    handlers[InfoRetrieveMessageEvent] = &info_retrieve_handler;
+    handlers[CatalogIndexMessageEvent] = &catalog_index_handler;
+    handlers[CatalogPageMessageEvent] = &catalog_page_handler;
+    handlers[GetBalanceMessageEvent] = &send_balance_handler;
+    handlers[GetUserCategoriesMessageEvent] = &get_user_categories_handler;
     handlers[RoomTextSearchMessageEvent] = &navigator_text_search_test;
 }
 
