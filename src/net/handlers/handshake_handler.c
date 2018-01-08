@@ -1,5 +1,6 @@
 #include "handshake_handler.h"
 
+#include "../../catalog/catalog.h"
 #include "../composers/handshake_composers.h"
 #include "../composers/player_composers.h"
 
@@ -48,6 +49,10 @@ void send_balance_handler(hh_buffer_t *buffer, hh_session_t *session) {
     }
 
     hh_write_message(credit_balance_composer(session->player->data->credits), session);
+
+    hh_catalog_state_t *catalog_state = hh_catalog_state();
+
+    hh_write_message(catalog_index_composer(catalog_state->loaded_pages, catalog_state->pages, session->player->data->rank), session);        
 }
 
 void get_user_categories_handler(hh_buffer_t *buffer, hh_session_t *session) {

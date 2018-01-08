@@ -13,6 +13,6 @@
 #define UserObjectMessageComposer 5
 #define CreditBalanceMessageComposer 6
 #define UserRoomCategoriesMessageComposer 221
-
+#define MessengerInitMessageComposer 12
 #define CatalogIndexMessageComposer 126
 #define CatalogPageMessageComposer 127

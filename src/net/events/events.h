@@ -11,6 +11,7 @@ const short InfoRetrieveMessageEvent = 7;
 const short GetBalanceMessageEvent = 8;
 const short GetUserCategoriesMessageEvent = 151;
 
+const short MessengerInitMessageEvent = 12;
 const short RoomTextSearchMessageEvent = 437;
 const short CatalogIndexMessageEvent = 101;
 const short CatalogPageMessageEvent = 102;
