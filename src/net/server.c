@@ -117,3 +117,7 @@ void hh_start_server(const char *ip, int port) {
 
     uv_loop_close(loop);
 }
+
+void hh_stop_server() {
+    uv_stop(uv_default_loop());
+}

@@ -129,6 +129,10 @@ void hh_catalog_free_page(hh_catalog_page_t *page) {
     free(page);
 }
 
+void hh_catalog_mutex_init() {
+    uv_rwlock_init(&catalog_mutex);
+}
+
 void hh_catalog_mutex_read_lock() {
     uv_rwlock_rdlock(&catalog_mutex);
 }

@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
     hh_initialise_message_handler();    
 
     hh_sqlite_config_t sqlite_config = {
-        .server_db = "database/players.sqlite",  
+        .server_db = "database/server.sqlite",  
         .log_db = "database/logs.sqlite"
     };
 
@@ -36,7 +36,8 @@ int main(int argc, char *argv[]) {
     }
 
     hh_storage_initialise();
-
+    
+    hh_catalog_mutex_init();
     hh_catalog_initialise();
 
     printf("[libhh] initialising event loop with io on port %i\n", PORT);

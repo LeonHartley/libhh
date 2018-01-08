@@ -33,7 +33,10 @@ void handle_message(hh_buffer_t *buffer, hh_session_t *session) {
     if(handlers[header_id]) {
         printf("handling message with id %i\n", header_id);
 
-       handlers[header_id](buffer, session);
+        handlers[header_id](buffer, session);
+  
+        printf("length: %i, index: %i\n", buffer->length, buffer->index);
+        
     } else {
         printf("unhandled message with id %i\n", header_id);
     }

@@ -21,17 +21,15 @@ void catalog_page_handler(hh_buffer_t *buffer, hh_session_t *session) {
 
     int page_id = hh_buffer_read_int(buffer);
 
+    hh_catalog_mutex_read_lock();
+
     hh_catalog_state_t *catalog_state = hh_catalog_state();
 
-    hh_catalog_page_t *page = NULL;
-
-    for(int i = 0; i < catalog_state->loaded_pages; i++) {
-        if(catalog_state->pages[i]->id == page_id) {
-            page = catalog_state->pages[i];
-        }
-    }
+    hh_catalog_page_t *page = hh_catalog_find_page(page_id);
 
     if(page != NULL) {
         hh_write_message(catalog_page_composer(page), session);
     }
+
+    hh_catalog_mutex_read_unlock();
 }
