@@ -1,6 +1,6 @@
 #include "navigator.h"
 
-hh_catalog_state_t *catalog_state;
+hh_navigator_state_t catalog_state;
 
 void hh_navigator_initialise() {
 

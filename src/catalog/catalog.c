@@ -6,44 +6,40 @@
 #include <uv.h>
 
 uv_rwlock_t catalog_mutex;
-hh_catalog_state_t *catalog_state;
+hh_catalog_state_t catalog_state;
 
 void hh_catalog_initialise() {
     hh_catalog_mutex_write_lock();
 
-    hh_catalog_state_t *state = malloc(sizeof(hh_catalog_state_t));
-
-    state->loaded_items = 0;
-    state->loaded_pages = 0;
-    state->pages = calloc(MAX_CATALOG_PAGES, sizeof(hh_catalog_page_t));
-    state->items = calloc(MAX_CATALOG_ITEMS, sizeof(hh_catalog_item_t));
-
-    if(catalog_state != NULL) {
-        for(int i = 0; i < catalog_state->loaded_items; i++) {
-            hh_catalog_free_item(catalog_state->items[i]);
-        }
-
-        for(int i = 0; i < catalog_state->loaded_pages; i++) {
-            hh_catalog_free_page(catalog_state->pages[i]);
-        }
-
-        free(state->pages);
-        free(state->items);
-        free(catalog_state);
+    for(int i = 0; i < catalog_state.loaded_items; i++) {
+        hh_catalog_free_item(catalog_state.items[i]);
     }
 
-    catalog_state = state;
+    for(int i = 0; i < catalog_state.loaded_pages; i++) {
+        hh_catalog_free_page(catalog_state.pages[i]);
+    }
+
+    catalog_state.loaded_items = 0;
+    catalog_state.loaded_pages = 0;
+
+    if(catalog_state.pages == NULL) {
+        catalog_state.pages = calloc(MAX_CATALOG_PAGES, sizeof(hh_catalog_page_t));
+    }
+
+    if(catalog_state.items == NULL) {
+        catalog_state.items = calloc(MAX_CATALOG_ITEMS, sizeof(hh_catalog_item_t));
+    }
 
     hh_catalog_dao->load_pages();
     hh_catalog_dao->load_items();
 
     hh_catalog_mutex_write_unlock();
 
-    printf("[libhh] Loaded %i catalog pages, %i catalog items\n", state->loaded_pages, state->loaded_items);
+    printf("[libhh] Loaded %i catalog pages, %i catalog items\n", catalog_state.loaded_pages, catalog_state.loaded_items);
 }
  
 hh_catalog_state_t *hh_catalog_state() {
-    return catalog_state;
+    return &catalog_state;
 }
 
 void hh_catalog_add_page(int id, int parent_id, char *name, int min_rank, int enabled, int is_category,
@@ -71,7 +67,7 @@ void hh_catalog_add_page(int id, int parent_id, char *name, int min_rank, int en
 
     page->total_items = 0;
 
-    catalog_state->pages[catalog_state->loaded_pages++] = page;
+    catalog_state.pages[catalog_state.loaded_pages++] = page;
 }
 
 void hh_catalog_add_item(int id, int page_id, char *code, int item_def_id,
@@ -98,13 +94,13 @@ void hh_catalog_add_item(int id, int page_id, char *code, int item_def_id,
         page->items[page->total_items++] = item;
     }
 
-    catalog_state->items[catalog_state->loaded_items++] = item;
+    catalog_state.items[catalog_state.loaded_items++] = item;
 }
 
 hh_catalog_page_t *hh_catalog_find_page(int id) {
-    for(int i = 0; i < catalog_state->loaded_pages; i++) {
-        if(catalog_state->pages[i]->id == id) {
-            return catalog_state->pages[i];
+    for(int i = 0; i < catalog_state.loaded_pages; i++) {
+        if(catalog_state.pages[i]->id == id) {
+            return catalog_state.pages[i];
         }
     }
 
