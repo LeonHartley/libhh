@@ -18,6 +18,11 @@ typedef struct hh_navigator_featured_s {
 } hh_navigator_featured_t;
 
 typedef struct hh_navigator_state_s {
+    int loaded_categories;
+    int loaded_featured;
+
+    hh_navigator_featured_t **featured;
+    hh_navigator_category_t **categories;
 
 } hh_navigator_state_t;
 

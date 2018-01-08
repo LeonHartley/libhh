@@ -5,10 +5,12 @@
 #include <stdlib.h>
 #include <uv.h>
 
-uv_rwlock_t *catalog_mutex;
+uv_rwlock_t catalog_mutex;
 hh_catalog_state_t *catalog_state;
 
 void hh_catalog_initialise() {
+    hh_catalog_mutex_write_lock();
+
     hh_catalog_state_t *state = malloc(sizeof(hh_catalog_state_t));
 
     state->loaded_items = 0;
@@ -34,6 +36,8 @@ void hh_catalog_initialise() {
 
     hh_catalog_dao->load_pages();
     hh_catalog_dao->load_items();
+
+    hh_catalog_mutex_write_unlock();
 
     printf("[libhh] Loaded %i catalog pages, %i catalog items\n", state->loaded_pages, state->loaded_items);
 }
@@ -127,4 +131,20 @@ void hh_catalog_free_page(hh_catalog_page_t *page) {
     free(page->items);
 
     free(page);
+}
+
+void hh_catalog_mutex_read_lock() {
+    uv_rwlock_rdlock(&catalog_mutex);
+}
+
+void hh_catalog_mutex_read_unlock() {
+    uv_rwlock_rdunlock(&catalog_mutex);
+}
+
+void hh_catalog_mutex_write_lock() {
+    uv_rwlock_wrlock(&catalog_mutex);
+}
+
+void hh_catalog_mutex_write_unlock() {
+    uv_rwlock_wrunlock(&catalog_mutex);
 }
