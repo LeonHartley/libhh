@@ -3,6 +3,7 @@
 #include "sqlite/database.h"
 #include "sqlite/player_dao.h"
 #include "sqlite/catalog_dao.h"
+#include "sqlite/navigator_dao.h"
 
 #include <stdlib.h>
 
@@ -16,4 +17,9 @@ void hh_storage_initialise() {
 
     hh_catalog_dao_initialise(catalog_dao);
     hh_catalog_dao = catalog_dao;
+
+    hh_navigator_dao_t *navigator_dao = malloc(sizeof(hh_navigator_dao_t));
+
+    hh_navigator_dao_initialise(navigator_dao);
+    hh_navigator_dao = navigator_dao;
 }

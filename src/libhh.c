@@ -40,6 +40,9 @@ int main(int argc, char *argv[]) {
     hh_catalog_mutex_init();
     hh_catalog_initialise();
 
+    hh_navigator_mutex_init();
+    hh_navigator_initialise();
+
     printf("[libhh] initialising event loop with io on port %i\n", PORT);
     hh_start_server(HOST, PORT);
 
