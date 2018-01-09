@@ -30,16 +30,19 @@ void hh_initialise_message_handler() {
 void handle_message(hh_buffer_t *buffer, hh_session_t *session) {
     short header_id = hh_buffer_read_short(buffer);
 
+    if(!header_id) {
+        return;
+    }
+
     if(handlers[header_id]) {
         printf("handling message with id %i\n", header_id);
 
         handlers[header_id](buffer, session);
-  
-        printf("length: %i, index: %i\n", buffer->length, buffer->index);
-        
     } else {
         printf("unhandled message with id %i\n", header_id);
     }
+
+    printf("length: %i, index: %i\n", buffer->length, buffer->index);
 }
 
 void hh_write_message(hh_buffer_t* message, hh_session_t *session) {

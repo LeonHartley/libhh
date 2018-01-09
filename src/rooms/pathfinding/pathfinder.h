@@ -44,9 +44,6 @@ hh_pathfinder_node_t *hh_pathfinder_find_path(hh_pos_t *from, hh_pos_t *to, hh_r
     }
 
     hh_pos_t tmp;
-
-    path[0] = current;
-
     int path_size = 1;
     int diff;
     int cost;
