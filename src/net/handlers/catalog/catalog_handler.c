@@ -8,10 +8,11 @@ void catalog_index_handler(hh_buffer_t *buffer, hh_session_t *session) {
         return;
     }
 
-    // Moved this to the credit balance event temporarily..
-    //hh_catalog_state_t *catalog_state = hh_catalog_state();
+    hh_catalog_mutex_read_lock();
+    hh_catalog_state_t *catalog_state = hh_catalog_state();
 
-    //hh_write_message(catalog_index_composer(catalog_state->loaded_pages, catalog_state->pages, session->player->data->rank), session);
+    hh_write_message(catalog_index_composer(catalog_state->loaded_pages, catalog_state->pages, session->player->data->rank), session);
+    hh_catalog_mutex_read_unlock();
 }
 
 void catalog_page_handler(hh_buffer_t *buffer, hh_session_t *session) {
