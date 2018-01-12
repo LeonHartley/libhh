@@ -31,6 +31,8 @@ typedef struct hh_navigator_state_s {
 
 void hh_navigator_initialise();
 
+hh_navigator_state_t *hh_navigator_state();
+
 void hh_navigator_add_category(int id, char *name, int min_rank);
 
 void hh_navigator_add_featured(int id, int banner_type, char *caption, char *image,

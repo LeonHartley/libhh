@@ -6,6 +6,8 @@
 
 #include <stdlib.h>
 
+#include "dispatch/dispatch.h"
+
 #include "net/message_handler.h"
 #include "net/server.h"
 
@@ -16,6 +18,10 @@
 
 #include "players/player.h"
 #include "catalog/catalog.h"
+
+void test_async(void *data) {
+    printf("we're async! :-D\n");
+}
 
 int main(int argc, char *argv[]) {
     printf("[libhh] habbo emulation written in C\n");
@@ -34,6 +40,15 @@ int main(int argc, char *argv[]) {
         printf("[libhh] Failed to load databases!");
         return 1;
     }
+
+    /*
+     *  3 for rooms, 2 for others.
+     *  This ensures the server is using a total
+     *  of 8 threads. (1 thread is used for listening)
+     */
+    hh_dispatch_initialise(3, 2, 2);
+
+   //_dispatch(GameDispatch, &test_async, NULL);
 
     hh_storage_initialise();
     

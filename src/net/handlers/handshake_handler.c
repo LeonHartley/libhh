@@ -3,6 +3,7 @@
 #include "../../catalog/catalog.h"
 #include "../composers/handshake_composers.h"
 #include "../composers/player_composers.h"
+#include "../composers/navigator_composers.h"
 
 const char *motd_str = "welcome to the official libhh test server. this hotel is powered by libhh, a high performance lightweight emulator written in pure C.";
 
@@ -56,7 +57,8 @@ void get_user_categories_handler(hh_buffer_t *buffer, hh_session_t *session) {
         return;
     }
 
-    hh_write_message(user_room_categories_composer(), session);
+    
+    //hh_write_message(user_room_categories_composer(), session);
 }
 
 void navigator_text_search_test(hh_buffer_t *buffer, hh_session_t *session) {

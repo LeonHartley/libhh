@@ -34,6 +34,10 @@ void hh_navigator_initialise() {
     printf("[libhh] Loaded %i navigator categories, %i featured rooms\n", nav_state.loaded_categories, nav_state.loaded_featured);
 }
 
+hh_navigator_state_t *hh_navigator_state() {
+    return &nav_state;
+}
+
 void hh_navigator_add_category(int id, char *name, int min_rank) {
     hh_navigator_category_t *category = malloc(sizeof(hh_navigator_category_t));
 

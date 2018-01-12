@@ -43,18 +43,3 @@ hh_buffer_t *credit_balance_composer(int balance) {
 
     return credits;
 }
-
-hh_buffer_t *user_room_categories_composer() {
-    hh_buffer_t *categories = hh_buffer_create(64, (char *) malloc(64));
-
-    hh_buffer_initialise(categories);
-    hh_buffer_write_short(UserRoomCategoriesMessageComposer, categories);
-    
-    hh_buffer_write_int(1, categories);
-
-    hh_buffer_write_int(1, categories);
-    hh_buffer_write_string("Rooms", categories);
-    hh_buffer_write_byte(1, categories);
-
-    return categories;
-}
