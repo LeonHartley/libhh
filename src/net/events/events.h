@@ -10,6 +10,7 @@ const short SSOTicketMessageEvent = 415;
 const short InfoRetrieveMessageEvent = 7;
 const short GetBalanceMessageEvent = 8;
 const short GetUserCategoriesMessageEvent = 151;
+const short OfficialRoomsMessageEvent = 380;
 
 const short MessengerInitMessageEvent = 12;
 const short RoomTextSearchMessageEvent = 437;

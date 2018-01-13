@@ -1,6 +1,7 @@
 #include "dispatch.h"
 
 #include <stdlib.h>
+#include <unistd.h>
 
 int runner_count = 0;
 hh_dispatch_loop_group_t game_dispatch;
@@ -13,14 +14,24 @@ void hh_dispatch_initialise(int game_dispatch_count, int room_dispatch_count, in
     dispatch_initialise_loops(&storage_dispatch, storage_dispatch_count);
 }
 
+void dispatch_async_test(uv_async_t *handle, int status) {
+    printf("async operation test\n");
+}
+
 void dispatch_initialise_loop_thread(void *data) {
     hh_dispatch_loop_t *loop = (hh_dispatch_loop_t *) data;
-    
+    uv_async_t async;
+
     uv_loop_init(loop->loop);
 
-    printf("[libhh] starting runner thread %i\n", loop->id);
+    // We gotta add atleast 1 thing to the loop before we run it.
+    uv_async_init(loop->loop, &async, dispatch_async_test);
+    
+    printf("[libhh] starting async loop thread %i\n", loop->id);
   
     int r = uv_run(loop->loop, UV_RUN_DEFAULT);
+
+    printf("[libhh] runner has exited: %i\n", r);
 }
 
 void dispatch_initialise_loops(hh_dispatch_loop_group_t *group, int count) {
@@ -40,7 +51,8 @@ void dispatch_initialise_loops(hh_dispatch_loop_group_t *group, int count) {
         loop->loop = malloc(sizeof(uv_loop_t));
         loop->thread = malloc(sizeof(uv_thread_t));
         
-        uv_thread_create(loop->thread, &dispatch_initialise_loop_thread, (void *) loop);
+        uv_thread_create(loop->thread, &dispatch_initialise_loop_thread, loop);
+    //    uv_thread_join(loop->thread);
 
         group->loops[i] = loop;
     }

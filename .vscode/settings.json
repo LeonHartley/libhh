@@ -1,0 +1,33 @@
+{
+    "files.associations": {
+        "xlocale": "cpp",
+        "handshake_handler.h": "c",
+        "session.h": "c",
+        "composers.h": "c",
+        "player.h": "c",
+        "vector": "c",
+        "xstring": "c",
+        "xutility": "c",
+        "xmemory": "c",
+        "auth.h": "c",
+        "handshake_composers.h": "c",
+        "player_composers.h": "c",
+        "iosfwd": "c",
+        "catalog_composers.h": "c",
+        "catalog_handler.h": "c",
+        "type_traits": "c",
+        "catalog.h": "c",
+        "messenger_composers.h": "c",
+        "messenger_handler.h": "c",
+        "navigator.h": "c",
+        "map": "cpp",
+        "xlocnum": "c",
+        "navigator_composers.h": "c",
+        "system_error": "c",
+        "dispatch.h": "c",
+        "storage.h": "c",
+        "navigator_handler.h": "c",
+        "message_handler.h": "c",
+        "events.h": "c"
+    }
+}

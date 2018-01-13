@@ -16,3 +16,4 @@
 #define MessengerInitMessageComposer 12
 #define CatalogIndexMessageComposer 126
 #define CatalogPageMessageComposer 127
+#define FeaturedRoomsMessageComposer 450

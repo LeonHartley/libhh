@@ -30,7 +30,7 @@ void hh_navigator_dao_load_featured() {
     sqlite3 *db = hh_sqlite_server_db();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(db, "SELECT id, order_num, banner_type, caption, image, image_type, room_id, category_id, category_parent_id FROM navigator_featured;", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(db, "SELECT id, banner_type, caption, image, image_type, room_id, category_id, category_parent_id FROM navigator_featured;", -1, &stmt, 0);
 
     if (status != SQLITE_OK) {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));

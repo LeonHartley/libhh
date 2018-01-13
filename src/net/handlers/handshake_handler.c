@@ -51,19 +51,3 @@ void send_balance_handler(hh_buffer_t *buffer, hh_session_t *session) {
 
     hh_write_message(credit_balance_composer(session->player->data->credits), session);
 }
-
-void get_user_categories_handler(hh_buffer_t *buffer, hh_session_t *session) {
-    if(session->player == NULL) {
-        return;
-    }
-
-    
-    //hh_write_message(user_room_categories_composer(), session);
-}
-
-void navigator_text_search_test(hh_buffer_t *buffer, hh_session_t *session) {
-    char *search_str = hh_buffer_read_string(buffer);
-
-    printf("search str %s, length %i\n", search_str, strlen(search_str));
-    free(search_str);
-}

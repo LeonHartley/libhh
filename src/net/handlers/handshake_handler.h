@@ -18,7 +18,3 @@ void read_sso_ticket_handler(hh_buffer_t *buffer, hh_session_t *session);
 void info_retrieve_handler(hh_buffer_t *buffer, hh_session_t *session);
 
 void send_balance_handler(hh_buffer_t *buffer, hh_session_t *session);
-
-void get_user_categories_handler(hh_buffer_t *buffer, hh_session_t *session);
-
-void navigator_text_search_test(hh_buffer_t *buffer, hh_session_t *session);

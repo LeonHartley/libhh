@@ -9,6 +9,8 @@ uv_rwlock_t nav_mutex;
 hh_navigator_state_t nav_state;
 
 void hh_navigator_initialise() {    
+    hh_navigator_mutex_write_lock();
+
     for(int i = 0; i < nav_state.loaded_categories; i++) {
         hh_navigator_free_category(nav_state.categories[i]);
     }
@@ -32,6 +34,8 @@ void hh_navigator_initialise() {
     hh_navigator_dao->load_featured();
 
     printf("[libhh] Loaded %i navigator categories, %i featured rooms\n", nav_state.loaded_categories, nav_state.loaded_featured);
+
+    hh_navigator_mutex_write_unlock();
 }
 
 hh_navigator_state_t *hh_navigator_state() {
@@ -61,6 +65,8 @@ void hh_navigator_add_featured(int id, int banner_type, char *caption, char *ima
     featured->category_id = category_id;
     featured->category_parent_id;
     
+    printf("featured room %s\n", featured->caption);
+
     nav_state.featured[nav_state.loaded_featured++];
 }
 

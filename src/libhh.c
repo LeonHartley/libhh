@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
      *  This ensures the server is using a total
      *  of 8 threads. (1 thread is used for listening)
      */
-    hh_dispatch_initialise(3, 2, 2);
+    hh_dispatch_initialise(1, 1, 1);
 
    //_dispatch(GameDispatch, &test_async, NULL);
 

@@ -7,6 +7,7 @@
 #include "handlers/handshake_handler.h"
 #include "handlers/catalog/catalog_handler.h"
 #include "handlers/messenger/messenger_handler.h"
+#include "handlers/navigator/navigator_handler.h"
 
 #include "server.h"
 
@@ -24,6 +25,7 @@ void hh_initialise_message_handler() {
     handlers[GetBalanceMessageEvent] = &send_balance_handler;
     handlers[MessengerInitMessageEvent] = &init_messenger_handler;
     handlers[GetUserCategoriesMessageEvent] = &get_user_categories_handler;
+    handlers[OfficialRoomsMessageEvent] = &official_rooms_handler;
     handlers[RoomTextSearchMessageEvent] = &navigator_text_search_test;
 }
 
