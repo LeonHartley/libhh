@@ -49,7 +49,7 @@ void hh_navigator_add_category(int id, char *name, int min_rank) {
     category->name = strdup(name);
     category->min_rank = min_rank;
 
-    nav_state.categories[nav_state.loaded_categories++];
+    nav_state.categories[nav_state.loaded_categories++] = category;
 }
 
 void hh_navigator_add_featured(int id, int banner_type, char *caption, char *image,
@@ -65,9 +65,7 @@ void hh_navigator_add_featured(int id, int banner_type, char *caption, char *ima
     featured->category_id = category_id;
     featured->category_parent_id;
     
-    printf("featured room %s\n", featured->caption);
-
-    nav_state.featured[nav_state.loaded_featured++];
+    nav_state.featured[nav_state.loaded_featured++] = featured;
 }
 
 void hh_navigator_free_category(hh_navigator_category_t *category) {
