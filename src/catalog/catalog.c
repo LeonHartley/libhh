@@ -66,6 +66,7 @@ void hh_catalog_add_page(int id, int parent_id, char *name, int min_rank, int en
     page->teaser_txt = strdup(teaser_txt);
 
     page->total_items = 0;
+    page->items = NULL;
 
     catalog_state.pages[catalog_state.loaded_pages++] = page;
 }
