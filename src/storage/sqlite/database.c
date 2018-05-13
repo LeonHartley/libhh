@@ -16,6 +16,7 @@ int hh_sqlite_initialise_dbs(hh_sqlite_config_t *config) {
     }
 
     sqlite_context = ctx;
+    return 0;
 }
 
 sqlite3 *hh_sqlite_server_db() {

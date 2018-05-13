@@ -1,6 +1,7 @@
 #include "server.h"
 #include "buffer/buffer.h"
 #include "sessions/session.h"
+#include "message_handler.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -59,7 +60,7 @@ void hh_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
                 int index_start = core_buffer->index;
                 int message_length = hh_buffer_read_int(core_buffer);
 
-                handle_message(core_buffer, (hh_session_t *)handle->data);
+                hh_handle_message(core_buffer, (hh_session_t *) handle->data);
                 
                 int bytes_read = core_buffer->index - index_start;
 
@@ -86,13 +87,7 @@ void hh_on_new_connection(uv_stream_t *server, int status) {
 
     uv_tcp_init(uv_default_loop(), client);
 
-    struct sockaddr_in client_addr;
-    int client_addr_length;
-
-    uv_tcp_getpeername((uv_stream_t *) client, &client_addr, &client_addr_length);
-    char *ip = inet_ntoa(client_addr.sin_addr);
-
-    hh_session_t *session = hh_session_create((uv_stream_t *) client, ip);
+    hh_session_t *session = hh_session_create((uv_stream_t *) client, "");
 
     client->data = session;
 

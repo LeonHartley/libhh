@@ -58,6 +58,8 @@ void hh_catalog_add_page(int id, int parent_id, char *name, int min_rank, int en
 
 void hh_catalog_add_item(int id, int page_id, char *code, int item_def_id, int amount, int price_credits, int price_activity_points, int price_vip_points);
 
+void hh_catalog_free_item(hh_catalog_item_t *item);
+
 void hh_catalog_mutex_init();
 void hh_catalog_mutex_read_lock();
 void hh_catalog_mutex_read_unlock();

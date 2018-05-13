@@ -29,7 +29,7 @@ void hh_initialise_message_handler() {
     handlers[RoomTextSearchMessageEvent] = &navigator_text_search_test;
 }
 
-void handle_message(hh_buffer_t *buffer, hh_session_t *session) {
+void hh_handle_message(hh_buffer_t *buffer, hh_session_t *session) {
     short header_id = hh_buffer_read_short(buffer);
 
     if(!header_id) {

@@ -1,1 +1,0 @@
-rm -rf libhh && make

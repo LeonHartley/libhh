@@ -1,11 +1,14 @@
 #pragma once
 
+#include <rooms/room.h>
 #include "../players/player.h"
 
 typedef hh_player_data_t *(*hh_player_dao_authenticate_cb) (char *auth_ticket);
 
 typedef void (*hh_catalog_dao_load_cb) ();
 typedef void (*hh_navigator_dao_load_cb) ();
+
+//typedef hh_room_data_t *(hh_room_dao_get_data_cb) (int id);
 
 typedef struct {
     hh_player_dao_authenticate_cb authenticate;
@@ -20,6 +23,10 @@ typedef struct {
     hh_navigator_dao_load_cb load_categories;
     hh_navigator_dao_load_cb load_featured;
 } hh_navigator_dao_t;
+
+//typedef struct {
+//    hh_room_dao_get_data_cb get_room;
+//}
 
 hh_player_dao_t *hh_player_dao;
 hh_catalog_dao_t *hh_catalog_dao;

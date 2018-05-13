@@ -16,8 +16,12 @@
 #include "storage/storage.h"
 #include "storage/sqlite/database.h"
 
+#include "util/collections/hashtable.h"
+
 #include "players/player.h"
 #include "catalog/catalog.h"
+
+#include "navigator/navigator.h"
 
 void test_async(void *data) {
     printf("we're async! :-D\n");

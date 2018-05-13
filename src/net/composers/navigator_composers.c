@@ -27,8 +27,6 @@ hh_buffer_t *featured_rooms_message_composer(int total_featured, hh_navigator_fe
     hh_buffer_initialise(buffer);
     hh_buffer_write_short(FeaturedRoomsMessageComposer, buffer);
 
-    hh_buffer_write_int(0, buffer);
-   
     hh_buffer_write_int(total_featured, buffer);
     
     for(int i = 0; i < total_featured; i++) {
@@ -39,10 +37,10 @@ hh_buffer_t *featured_rooms_message_composer(int total_featured, hh_navigator_fe
         hh_buffer_write_string("", buffer);
         hh_buffer_write_int(0, buffer);
         hh_buffer_write_string(f->caption, buffer);
-        hh_buffer_write_string(f->image, buffer);
+        hh_buffer_write_string(f->image, buffer);// image length, empty if internal :-)
         hh_buffer_write_int(0, buffer);//parent id
-        hh_buffer_write_int(1, buffer);//users now-1 to test
-        hh_buffer_write_int(3, buffer);//public room
+        hh_buffer_write_int(0, buffer);//users now-1 to test
+        hh_buffer_write_int(3, buffer);//type: public room
         
         hh_buffer_write_string(f->image, buffer);
         hh_buffer_write_int(0, buffer);
@@ -51,6 +49,8 @@ hh_buffer_t *featured_rooms_message_composer(int total_featured, hh_navigator_fe
         hh_buffer_write_int(0, buffer);
         hh_buffer_write_int(0, buffer);
     }
+    
+    hh_buffer_write_int(0, buffer);
 
     return buffer;
 }
