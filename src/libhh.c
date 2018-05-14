@@ -50,6 +50,9 @@ int main(int argc, char *argv[]) {
         hh_dictionary_add(i, data, dictionary);
 
         printf("Adding dict element %i, value: %s\n", i, (char *) data);
+    }
+
+    for(int i = 0; i < 10000; i++) {
         printf("Removing dict element %i, value: %s\n", i, (char *) hh_dictionary_remove(i, dictionary));
     }
 

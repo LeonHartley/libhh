@@ -102,7 +102,7 @@ void *hh_dictionary_remove(int id, hh_dictionary_t *dict) {
     hh_dictionary_bucket_t *bucket = dict->buckets[id % DICTIONARY_MAX_BUCKETS];
 
     if(bucket == NULL) {
-        uv_rwlock_rdunlock(dict->mutex);
+        uv_rwlock_wrunlock(dict->mutex);
         return NULL;
     }
 
@@ -113,10 +113,12 @@ void *hh_dictionary_remove(int id, hh_dictionary_t *dict) {
             hh_dictionary_bucket_entry_t *remove = entry->next;
 
             entry->next = remove->next;
+            void *data = remove->data;
 
             free(remove);
+
             uv_rwlock_wrunlock(dict->mutex);
-            return remove->data;
+            return data;
         }
 
         entry = entry->next;
