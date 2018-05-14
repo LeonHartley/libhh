@@ -10,7 +10,7 @@ int hh_player_auth(hh_session_t *session, char *sso_ticket) {
         return 0;
     }
 
-    hh_player_t *player = hh_player_create(player_data, session);
+    hh_player_t *player = hh_player_create(player_data);
 
     session->player = player;
 

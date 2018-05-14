@@ -24,21 +24,6 @@
 
 #include "navigator/navigator.h"
 
-int i = 0;
-
-void test_async(void *data) {
-    uv_thread_t *thread = uv_thread_self();
-
-    if (i == 0) {
-        hh_dispatch_timer_t *scheduled = hh_dispatch_timer_create(RoomDispatch, &test_async, "looool");
-        printf("%i\n", hh_dispatch_timer_start(scheduled, 500));
-
-        i = 1;
-    }
-
-    printf("thread: %i, str: %s\n", (int) thread, (char *) data);
-}
-
 int main(int argc, char *argv[]) {
     printf("[libhh] habbo emulation written in C\n");
 
@@ -62,23 +47,7 @@ int main(int argc, char *argv[]) {
      *  This ensures the server is using a total
      *  of 8 threads. (1 thread is used for listening)
      */
-    hh_dispatch_initialise(3, 2, 2);
-
-    {
-        hh_dispatch_timer_t *scheduled = hh_dispatch_timer_create(RoomDispatch, &test_async, "yoo");
-        printf("%i\n", hh_dispatch_timer_start(scheduled, 500));
-    }
-
-    {
-        hh_dispatch_timer_t *scheduled = hh_dispatch_timer_create(RoomDispatch, &test_async, "yoo");
-        printf("%i\n", hh_dispatch_timer_start(scheduled, 500));
-    }
-
-    {
-        hh_dispatch_timer_t *scheduled = hh_dispatch_timer_create(RoomDispatch, &test_async, "yoo");
-        printf("%i\n", hh_dispatch_timer_start(scheduled, 500));
-    }
-
+    hh_dispatch_initialise(2, 3, 2);
 
     hh_storage_initialise();
 
@@ -86,8 +55,16 @@ int main(int argc, char *argv[]) {
     hh_catalog_initialise();
 
     hh_navigator_mutex_init();
-
     hh_navigator_initialise();
+
+
+    void on_complete(void *data) {
+        printf("it works!\n");
+    }
+
+    hh_dispatch(GameDispatch, &on_complete, NULL);
+    hh_dispatch(GameDispatch, &on_complete, NULL);
+    hh_dispatch(GameDispatch, &on_complete, NULL);
 
     printf("[libhh] initialising event loop with io on port %i\n", PORT);
 

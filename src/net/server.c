@@ -5,6 +5,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <dispatch/dispatch.h>
 
 const char policy_file[208] = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE cross-domain-policy \ SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\r\n<cross-domain-policy>\r\n<allow-access-from domain=\"*\" to-ports=\"*\" />\r\n</cross-domain-policy>\0";
 
@@ -34,6 +35,31 @@ void hh_close_on_write(uv_write_t *req, int status) {
     uv_close((uv_handle_t *) req->handle, hh_on_connection_close);
 }
 
+typedef struct hh_dispatch_msg_handler_ctx_s {
+    hh_session_t *session;
+    hh_buffer_t *buffer;
+} hh_dispatch_msg_handler_ctx_t;
+
+void dispatch_msg_handler(hh_dispatch_msg_handler_ctx_t *ctx) {
+    while(ctx->buffer->index < ctx->buffer->length && (ctx->buffer->length - ctx->buffer->index >= 6)) {
+        int index_start = ctx->buffer->index;
+        int message_length = hh_buffer_read_int(ctx->buffer);
+
+        hh_handle_message(ctx->buffer, ctx->session);
+
+        int bytes_read = ctx->buffer->index - index_start;
+
+        printf("core length: %i, index start %i, length %i, bytes read %i, next index: %i\n", ctx->buffer->length, index_start, message_length, bytes_read, ctx->buffer->index + (message_length - bytes_read));
+
+        if(bytes_read < message_length) {
+            ctx->buffer->index += message_length - bytes_read;
+        }
+    }
+
+    hh_buffer_free(ctx->buffer);
+    free(ctx);
+}
+
 void hh_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
     if(nread == UV_EOF) {
         uv_close((uv_handle_t *) handle, hh_on_connection_close);
@@ -46,7 +72,7 @@ void hh_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
 
             uv_buf_t buffer = uv_buf_init(malloc(sizeof(policy_file)), sizeof(policy_file));
 
-            buffer.base = policy_file;
+            buffer.base = (char *) policy_file;
 
             req->handle = handle;
             req->data = buffer.base;
@@ -55,23 +81,12 @@ void hh_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
         } else {
             // here we want to create a buffer
             hh_buffer_t *core_buffer = hh_buffer_create(nread, buf->base);
+            hh_dispatch_msg_handler_ctx_t *ctx = malloc(sizeof(hh_dispatch_msg_handler_ctx_t));
 
-            while(core_buffer->index < core_buffer->length && (core_buffer->length - core_buffer->index >= 6)) {
-                int index_start = core_buffer->index;
-                int message_length = hh_buffer_read_int(core_buffer);
+            ctx->session = handle->data;
+            ctx->buffer = core_buffer;
 
-                hh_handle_message(core_buffer, (hh_session_t *) handle->data);
-                
-                int bytes_read = core_buffer->index - index_start;
-
-                printf("core length: %i, index start %i, length %i, bytes read %i, next index: %i\n", core_buffer->length, index_start, message_length, bytes_read, core_buffer->index + (message_length - bytes_read));
-
-                if(bytes_read < message_length) {
-                    core_buffer->index += message_length - bytes_read;
-                }
-            }
-
-            hh_buffer_free(core_buffer);
+            hh_dispatch(GameDispatch, (hh_dispatch_cb_t) &dispatch_msg_handler, ctx);
         }
     } else {
         uv_close((uv_handle_t *) handle, hh_on_connection_close);

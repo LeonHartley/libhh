@@ -3,7 +3,7 @@
 #include "composers.h"
 
 hh_buffer_t *user_room_categories_composer(int total_categories, hh_navigator_category_t **categories) {
-    hh_buffer_t *c = hh_buffer_create(128, (char *) malloc(128));
+    hh_buffer_t *c = hh_buffer_create_empty();
 
     hh_buffer_initialise(c);
     hh_buffer_write_short(UserRoomCategoriesMessageComposer, c);

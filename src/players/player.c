@@ -1,5 +1,7 @@
 #include "player.h"
 
+#include <mem.h>
+
 /**
  *  Creates a player with the set session
  */

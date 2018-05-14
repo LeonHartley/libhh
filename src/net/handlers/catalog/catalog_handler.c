@@ -1,7 +1,8 @@
 #include "catalog_handler.h"
 
-#include "../../../catalog/catalog.h"
-#include "../../composers/catalog_composers.h"
+#include "catalog/catalog.h"
+#include "net/message_handler.h"
+#include "net/composers/catalog_composers.h"
 
 void catalog_index_handler(hh_buffer_t *buffer, hh_session_t *session) {
     if(session->player == NULL) {

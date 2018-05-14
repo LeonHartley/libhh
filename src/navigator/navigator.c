@@ -1,6 +1,6 @@
 #include "navigator.h"
 
-#include "../storage/storage.h"
+#include "storage/storage.h"
 
 #include <stdlib.h>
 #include <uv.h>

@@ -20,7 +20,7 @@ typedef struct {
 /**
  *  Creates a player with the set session
  */
-hh_player_t *hh_player_create();
+hh_player_t *hh_player_create(hh_player_data_t *data);
 
 hh_player_data_t *hh_player_data_create(int id, const char *username, const char *figure, const char gender);
 
