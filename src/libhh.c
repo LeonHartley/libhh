@@ -6,6 +6,7 @@
 
 #include <stdlib.h>
 #include <zconf.h>
+#include <util/dictionary.h>
 
 #include "dispatch/dispatch.h"
 
@@ -42,6 +43,16 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    hh_dictionary_t *dictionary = hh_dictionary_create();
+
+    for(int i = 0; i < 10000; i++) {
+        void *data = "Leon";
+        hh_dictionary_add(i, data, dictionary);
+
+        printf("Adding dict element %i, value: %s\n", i, (char *) data);
+        printf("Removing dict element %i, value: %s\n", i, (char *) hh_dictionary_remove(i, dictionary));
+    }
+
     /*
      *  3 for rooms, 2 for others.
      *  This ensures the server is using a total
@@ -56,15 +67,6 @@ int main(int argc, char *argv[]) {
 
     hh_navigator_mutex_init();
     hh_navigator_initialise();
-
-
-    void on_complete(void *data) {
-        printf("it works!\n");
-    }
-
-    hh_dispatch(GameDispatch, &on_complete, NULL);
-    hh_dispatch(GameDispatch, &on_complete, NULL);
-    hh_dispatch(GameDispatch, &on_complete, NULL);
 
     printf("[libhh] initialising event loop with io on port %i\n", PORT);
 

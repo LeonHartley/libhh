@@ -2,12 +2,11 @@
 
 #include <uv.h>
 
-#define DICTIONARY_MAX_BUCKETS 64
+#define DICTIONARY_MAX_BUCKETS 128
 
 typedef struct hh_dictionary_bucket_entry_s {
     int id;
     void *data;
-    struct hh_dictionary_bucket_entry_s *previous;
     struct hh_dictionary_bucket_entry_s *next;
 } hh_dictionary_bucket_entry_t;
 
@@ -21,7 +20,7 @@ typedef struct hh_dictionary_s {
     uv_rwlock_t *mutex;
 } hh_dictionary_t;
 
-hh_dictionary_t *hh_dictionary_create(int max_entries) {
+hh_dictionary_t *hh_dictionary_create() {
     hh_dictionary_t *dict = malloc(sizeof(hh_dictionary_t));
 
     dict->buckets = calloc(DICTIONARY_MAX_BUCKETS, sizeof(hh_dictionary_bucket_t));
@@ -41,19 +40,27 @@ void hh_dictionary_add(int id, void *data, hh_dictionary_t *dict) {
 
     if(dict->buckets[id % DICTIONARY_MAX_BUCKETS] == NULL) {
         dict->buckets[id % DICTIONARY_MAX_BUCKETS] = malloc(sizeof(hh_dictionary_bucket_t));
+        dict->buckets[id % DICTIONARY_MAX_BUCKETS]->entry = NULL;
     }
 
     hh_dictionary_bucket_t *bucket = dict->buckets[id % DICTIONARY_MAX_BUCKETS];
-    hh_dictionary_bucket_entry_t *entry = bucket->entry;
+    hh_dictionary_bucket_entry_t *new_entry = malloc(sizeof(hh_dictionary_bucket_entry_t));
 
-    while(entry->next != NULL) {
-        entry = entry->next;
+    new_entry->id = id;
+    new_entry->data = data;
+    new_entry->next = NULL;
+
+    if(bucket->entry == NULL || bucket->entry->id == 0) {
+        bucket->entry = new_entry;
+    } else {
+        hh_dictionary_bucket_entry_t *entry = bucket->entry;
+
+        while (entry->next != NULL) {
+            entry = entry->next;
+        }
+
+        entry->next = new_entry;
     }
-
-    entry->next = malloc(sizeof(hh_dictionary_bucket_entry_t));
-    entry->next->id = id;
-    entry->next->data = data;
-    entry->next->previous = entry;
 
     uv_rwlock_wrunlock(dict->mutex);
 }
@@ -69,6 +76,12 @@ void *hh_dictionary_get(int id, hh_dictionary_t *dict) {
     }
 
     hh_dictionary_bucket_entry_t *entry = bucket->entry;
+
+    if(entry->id == id) {
+        uv_rwlock_rdunlock(dict->mutex);
+
+        return entry->data;
+    }
 
     while(entry->next != NULL) {
         entry = entry->next;
